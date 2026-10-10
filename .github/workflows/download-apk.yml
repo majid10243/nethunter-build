@@ -1,0 +1,17 @@
+name: Download NetHunter APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download APK
+        run: curl -L -o nethunter.apk "https://store.nethunter.com/repo/com.offsec.nethunter_2026061000.apk"
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: nethunter-apk
+          path: nethunter.apk
