@@ -1,0 +1,30 @@
+name: Build NetHunter Kernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone installer
+        run: git clone https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-installer.git
+
+      - name: Bootstrap
+        working-directory: kali-nethunter-installer
+        run: |
+          echo -e "n\nn\n" | ./bootstrap.sh
+
+      - name: Show build options
+        working-directory: kali-nethunter-installer
+        run: python3 build.py -h
+
+      - name: Build kernel installer
+        working-directory: kali-nethunter-installer
+        run: ./build.py -k hlte-eur-los --nougat -i
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: nethunter-kernel-hlte
+          path: kali-nethunter-installer/*.zip
